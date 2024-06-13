@@ -30,32 +30,25 @@ function setFontSize(newSize) {
 }
 
 function addLine() {
-    const canvasHeight = 500
-    let yPos
-    if (gMeme.lines.length === 0) {
-        yPos = 50
-    } else if (gMeme.lines.length === 1) {
-        yPos = canvasHeight - 50
-    } else {
-        yPos = canvasHeight / 2
-    }
+    const yPos = gMeme.lines.length === 0 ? 0.1 :
+        gMeme.lines.length === 1 ? 0.9 : 0.5;
     gMeme.lines.push({
         txt: 'New Line',
         size: 50,
         color: '#000000',
-        xPos: 250,
+        xPos: 0.5,
         yPos: yPos
     })
 }
 
 function switchLine() {
-    if (gMeme.selectedLineIdx === gMeme.lines.length - 1){
+    if (gMeme.selectedLineIdx === gMeme.lines.length - 1) {
         gMeme.selectedLineIdx = 0
-    } else{
+    } else {
         gMeme.selectedLineIdx++
     }
 }
 
-function setSelectedLineIdx(idx){
+function setSelectedLineIdx(idx) {
     gMeme.selectedLineIdx = idx
 }

@@ -42,16 +42,23 @@ function renderText(line) {
     gCtx.textBaseline = 'middle'
     gCtx.textAlign = 'center'
     gCtx.fillStyle = line.color
-    gCtx.fillText(line.txt, line.xPos, line.yPos)
+    gCtx.strokeStyle = 'black'
+    gCtx.lineWidth = 1
+    const xPos = line.xPos * gElCanvas.width
+    const yPos = line.yPos * gElCanvas.height
+    gCtx.strokeText(line.txt, xPos, yPos)
+    gCtx.fillText(line.txt, xPos, yPos)
 }
 
 function addSelectionBorder(line) {
     const textHeight = +line.size
     const textWidth = gCtx.measureText(line.txt).width
+    const xPos = line.xPos * gElCanvas.width
+    const yPos = line.yPos * gElCanvas.height
     const borderDiv = document.createElement('div')
     borderDiv.className = 'selected-line'
-    borderDiv.style.left = `${line.xPos - textWidth / 2 - PADDING}px`
-    borderDiv.style.top = `${line.yPos - textHeight / 2 - PADDING}px`
+    borderDiv.style.left = `${xPos - textWidth / 2 - PADDING}px`
+    borderDiv.style.top = `${yPos - textHeight / 2 - PADDING}px`
     borderDiv.style.width = `${textWidth + PADDING * 2}px`
     borderDiv.style.height = `${textHeight + PADDING * 2}px`
     document.querySelector('.canvas-container').appendChild(borderDiv);
@@ -61,7 +68,7 @@ function resizeCanvas() {
     let elContainer = document.querySelector('.canvas-container')
     let containerWidth = elContainer.offsetWidth
     let aspectRatio = gElCanvas.width / gElCanvas.height
-    const maxWidth = 800
+    const maxWidth = Math.min(800, containerWidth)
     const maxHeight = 600
     let newWidth = containerWidth
     let newHeight = containerWidth / aspectRatio
@@ -84,11 +91,13 @@ function getClickedLineIdx(x, y) {
         const line = lines[i]
         const textHeight = line.size
         const textWidth = gCtx.measureText(line.txt).width
+        const xPos = line.xPos * gElCanvas.width
+        const yPos = line.yPos * gElCanvas.height
         if (
-            x >= line.xPos - textWidth / 2 - PADDING &&
-            x <= line.xPos + textWidth / 2 + PADDING &&
-            y >= line.yPos - textHeight / 2 - PADDING &&
-            y <= line.yPos + textHeight / 2 + PADDING
+            x >= xPos - textWidth / 2 - PADDING &&
+            x <= xPos + textWidth / 2 + PADDING &&
+            y >= yPos - textHeight / 2 - PADDING &&
+            y <= yPos + textHeight / 2 + PADDING
         ) {
             return i;
         }

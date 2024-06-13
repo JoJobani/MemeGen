@@ -6,7 +6,8 @@
     display: grid;
     place-content: center;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    grid-auto-flow: dense;
+    gap: 10px;
+    padding: 10px;
 }
 
 img {
@@ -18,9 +19,21 @@ img {
 }
 
 header {
-    overflow: hidden;
-    background-color: #f1f1f1;
-    padding: 20px 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+@media (max-width: 500px) {
+    header {
+        flex-direction: column;
+    }
+
+    .nav-bar {
+        margin-top: 10px;
+    }
 }
 
 header a {
@@ -45,7 +58,8 @@ header a:hover {
 }
 
 .nav-bar {
-    float: right;
+    display: flex;
+    margin-top: 10px;
 }
 
 .canvas-container {
@@ -61,18 +75,28 @@ canvas {
 }
 
 .editor {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    padding: 10px;
 }
 
 .text-editor {
     display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
     justify-content: center;
     align-items: center;
     background-color: #f1f1f1;
-    padding: 20px 10px;
+    padding: 10px;
+}
+
+.text-editor input, .text-editor label {
+    margin: 5px;
+}
+
+.line-control {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px 0;
 }
 
 .btn {
