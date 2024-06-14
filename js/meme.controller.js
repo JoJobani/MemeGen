@@ -20,63 +20,73 @@ function onCloseEditor() {
     gElCanvas.removeEventListener('click', onCanvasClick)
 }
 
+//render the meme with everythig on it
 function renderMeme(img) {
     let image = new Image()
     image.src = img
     image.onload = () => {
-        //render fresh image
+        //render fresh image and text and clear previous clutter
         gCtx.drawImage(image, 0, 0, gElCanvas.width, gElCanvas.height)
-        document.querySelectorAll('.selected-line').forEach(el => el.remove())
-        //render lines
-        getMeme().lines.forEach((line, index) => {
-            renderText(line)
-            if (index === getMeme().selectedLineIdx) {
-                addSelectionBorder(line)
-            }
-        })
+        clearSelectionBorders()
+        renderLines()
     }
 }
 
-function renderText(line) {
-    gCtx.font = `${line.size}px Impact`
-    gCtx.textBaseline = 'middle'
-    gCtx.textAlign = 'center'
-    gCtx.fillStyle = line.color
-    gCtx.strokeStyle = 'black'
-    gCtx.lineWidth = 1
-    const xPos = line.xPos * gElCanvas.width
-    const yPos = line.yPos * gElCanvas.height
-    gCtx.strokeText(line.txt, xPos, yPos)
-    gCtx.fillText(line.txt, xPos, yPos)
+//go over the lines to render them
+function renderLines() {
+    getMeme().lines.forEach((line, index) => {
+        renderText(line)
+        if (index === getMeme().selectedLineIdx) {
+            addSelectionBorder(line)
+        }
+    })
 }
 
+//render text of each individual line
+function renderText(line) {
+    setCanvasFont(line)
+    const { x, y } = getObjectPos(line, gElCanvas)
+    gCtx.strokeText(line.txt, x, y)
+    gCtx.fillText(line.txt, x, y)
+}
+
+//create div for the border adjusted to the line size and positioning
 function addSelectionBorder(line) {
-    const textHeight = +line.size
-    const textWidth = +gCtx.measureText(line.txt).width
-    const xPos = line.xPos * gElCanvas.width
-    const yPos = line.yPos * gElCanvas.height
-    const borderDiv = document.createElement('div')
-    borderDiv.className = 'selected-line'
-
-    //calculate position relative to canvas
-    const canvasRect = gElCanvas.getBoundingClientRect()
-    const containerRect = gElCanvas.parentElement.getBoundingClientRect()
-    const leftOffset = canvasRect.left - containerRect.left
-    const topOffset = canvasRect.top - containerRect.top
-    
-    //calculate the positioning of the border while adjusting to the position of the canvas in the container
-    borderDiv.style.left = `${xPos - textWidth / 2 - PADDING + leftOffset}px`
-    borderDiv.style.top = `${yPos - textHeight / 2 - PADDING + topOffset}px`
-    borderDiv.style.width = `${textWidth + PADDING * 2}px`
-    borderDiv.style.height = `${textHeight + PADDING * 2}px`
-
+    //text size calc
+    const { width, height } = getTextDimensions(line)
+    //line positioning relative to canvas
+    const { x, y } = getObjectPos(line, gElCanvas)
+    const borderDiv = createBorderDiv(x, y, width, height)
     document.querySelector('.canvas-container').appendChild(borderDiv)
 }
 
+//create the actual border object
+function createBorderDiv(x, y, width, height) {
+    const borderDiv = document.createElement('div')
+    borderDiv.className = 'selected-line'
+
+    //calc offset due to canvas being smaller than container
+    const canvasRect = gElCanvas.getBoundingClientRect();
+    const containerRect = gElCanvas.parentElement.getBoundingClientRect();
+    const leftOffset = canvasRect.left - containerRect.left;
+    const topOffset = canvasRect.top - containerRect.top;
+
+    //calculate final border position
+    Object.assign(borderDiv.style, {
+        left: `${x - width / 2 - PADDING + leftOffset}px`,
+        top: `${y - height / 2 - PADDING + topOffset}px`,
+        width: `${width + PADDING * 2}px`,
+        height: `${height + PADDING * 2}px`
+    })
+    return borderDiv
+}
+
+//resize canvas whenever window size changes (with some limits)
 function resizeCanvas() {
     let elContainer = document.querySelector('.canvas-container')
     let containerWidth = elContainer.offsetWidth
     let aspectRatio = gElCanvas.width / gElCanvas.height
+    //make sure canvas image doesnt get too large when viewing with large viewport
     const maxWidth = Math.min(800, containerWidth)
     const maxHeight = 600
     let newWidth = containerWidth
@@ -89,31 +99,18 @@ function resizeCanvas() {
         newHeight = maxHeight
         newWidth = maxHeight * aspectRatio
     }
+    //apply new canvas position relative to window
     gElCanvas.width = newWidth;
     gElCanvas.height = newHeight;
     renderMeme(gImgs[getMeme().selectedImgId - 1].url);
 }
 
+//get the Idx of a clicked line
 function getClickedLineIdx(x, y) {
-    const lines = getMeme().lines
-    for (let i = 0; i < lines.length; i++) {
-        const line = lines[i]
-        const textHeight = line.size
-        const textWidth = gCtx.measureText(line.txt).width
-        const xPos = line.xPos * gElCanvas.width
-        const yPos = line.yPos * gElCanvas.height
-        if (
-            x >= xPos - textWidth / 2 - PADDING &&
-            x <= xPos + textWidth / 2 + PADDING &&
-            y >= yPos - textHeight / 2 - PADDING &&
-            y <= yPos + textHeight / 2 + PADDING
-        ) {
-            return i;
-        }
-    }
-    return -1
+    return getMeme().lines.findIndex(line => isClickInside(x, y, line))
 }
 
+//detect positioning of a click on the canvas
 function onCanvasClick(event) {
     const rect = gElCanvas.getBoundingClientRect()
     const xPos = event.clientX - rect.left
@@ -127,6 +124,7 @@ function onCanvasClick(event) {
     updateControlsForSelectedLine()
 }
 
+//apply the lines current settings to the line decoration bar
 function updateControlsForSelectedLine() {
     const selectedLine = getMeme().lines[getMeme().selectedLineIdx]
     document.querySelector('.line-txt').value = selectedLine.txt
