@@ -52,16 +52,25 @@ function renderText(line) {
 
 function addSelectionBorder(line) {
     const textHeight = +line.size
-    const textWidth = gCtx.measureText(line.txt).width
+    const textWidth = +gCtx.measureText(line.txt).width
     const xPos = line.xPos * gElCanvas.width
     const yPos = line.yPos * gElCanvas.height
     const borderDiv = document.createElement('div')
     borderDiv.className = 'selected-line'
-    borderDiv.style.left = `${xPos - textWidth / 2 - PADDING}px`
-    borderDiv.style.top = `${yPos - textHeight / 2 - PADDING}px`
+
+    //calculate position relative to canvas
+    const canvasRect = gElCanvas.getBoundingClientRect()
+    const containerRect = gElCanvas.parentElement.getBoundingClientRect()
+    const leftOffset = canvasRect.left - containerRect.left
+    const topOffset = canvasRect.top - containerRect.top
+    
+    //calculate the positioning of the border while adjusting to the position of the canvas in the container
+    borderDiv.style.left = `${xPos - textWidth / 2 - PADDING + leftOffset}px`
+    borderDiv.style.top = `${yPos - textHeight / 2 - PADDING + topOffset}px`
     borderDiv.style.width = `${textWidth + PADDING * 2}px`
     borderDiv.style.height = `${textHeight + PADDING * 2}px`
-    document.querySelector('.canvas-container').appendChild(borderDiv);
+
+    document.querySelector('.canvas-container').appendChild(borderDiv)
 }
 
 function resizeCanvas() {
