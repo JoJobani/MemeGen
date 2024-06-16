@@ -20,20 +20,54 @@ img {
 
 header {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
 }
 
-@media (max-width: 500px) {
+.editor{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.text-editor {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    background-color: #f1f1f1;
+    padding: 10px;
+}
+
+@media (min-width: 700px) {
     header {
-        flex-direction: column;
+        flex-direction: row;
     }
 
-    .nav-bar {
-        margin-top: 10px;
+    .editor{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        align-items: start;
     }
+
+    .text-editor{
+        flex-direction: column;
+    }
+}
+
+.line-control {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px 0;
 }
 
 header a {
@@ -65,7 +99,7 @@ header a:hover {
 .canvas-container {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     position: relative;
 }
 
@@ -74,29 +108,17 @@ canvas {
     height: auto;
 }
 
-.editor {
-    padding: 10px;
-}
-
-.text-editor {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-    background-color: #f1f1f1;
-    padding: 10px;
-}
-
-.text-editor input, .text-editor label {
+.text-editor input,
+.text-editor label {
     margin: 5px;
 }
 
-.line-control {
+.editor-right{
     display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin: 10px 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
 }
 
 .btn {

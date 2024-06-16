@@ -23,20 +23,22 @@
         <div class="canvas-container">
             <canvas width="500" height="500"></canvas>
         </div>
-        <div class="text-editor">
-            <input class="line-txt" oninput="onSetLineTxt({ txt: this.value })" placeholder="Choose Line Text"
-                type="text">
-            <label for="textColor">Text color: </label>
-            <input type="color" id="textColor" value="#000000" oninput="onSetTextColor(this.value)">
-            <label for="fontSize">Font size: </label>
-            <input type="range" id="fontSize" min="20" max="150" value="50" oninput="onSetFontSize(this.value)">
-            <span id="fontSizeValue">50</span>
-        </div>
-        <div class="line-control">
-            <button class="add-line" onclick="onAddLine()">Add Line</button>
-            <button class="switch-line" onclick="onSwitchLine()">Switch Line</button>
-        </div>
-        <a href="#" class="btn" onclick="downloadImg(this)" download="my-meme.jpg">Download meme</a>
+        <section class="editor-right">
+            <div class="text-editor">
+                <input class="line-txt" oninput="onSetLineTxt({ txt: this.value })" placeholder="Choose Line Text"
+                    type="text">
+                <label for="textColor">Text color: </label>
+                <input type="color" id="textColor" value="#000000" oninput="onSetTextColor(this.value)">
+                <label for="fontSize">Font size: </label>
+                <input type="range" id="fontSize" min="20" max="150" value="50" oninput="onSetFontSize(this.value)">
+                <span id="fontSizeValue">50</span>
+            </div>
+            <div class="line-control">
+                <button class="add-line" onclick="onAddLine()">Add Line</button>
+                <button class="switch-line" onclick="onSwitchLine()">Switch Line</button>
+            </div>
+            <a href="#" class="btn" onclick="downloadImg(this)" download="my-meme.jpg">Download meme</a>
+        </section>
     </section>
 
     <script src="js/services/utils.services.js"></script>
