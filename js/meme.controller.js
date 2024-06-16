@@ -160,6 +160,12 @@ function onSwitchLine() {
     renderMeme(gImgs[getMeme().selectedImgId - 1].url)
 }
 
+function onDeleteLine(){
+    if (!confirm('are you sure?')) return
+    deleteLine()
+    renderMeme(gImgs[getMeme().selectedImgId - 1].url)
+}
+
 function downloadImg(elLink) {
     const imgContent = gElCanvas.toDataURL('image/jpeg')
     elLink.href = imgContent

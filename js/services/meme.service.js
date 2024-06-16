@@ -49,6 +49,12 @@ function switchLine() {
     }
 }
 
+function deleteLine() {
+    if (gMeme.lines.length === 0) return
+    gMeme.lines.splice(gMeme.selectedLineIdx,1)
+    switchLine()
+}
+
 function setSelectedLineIdx(idx) {
     gMeme.selectedLineIdx = idx
 }
