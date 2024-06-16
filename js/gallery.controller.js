@@ -21,6 +21,23 @@ function onImgSelect(imgId) {
     renderMeme(gImgs[imgId - 1].url)
 }
 
-function onGallerySelect(){
+function onGallerySelect() {
     onCloseEditor()
+}
+
+function openAbout() {
+    event.preventDefault()
+    var modal = document.getElementById('aboutModal')
+    modal.style.display = 'block'
+
+    var span = document.getElementsByClassName("close")[0]
+    span.onclick = function() {
+        modal.style.display = "none"
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 }

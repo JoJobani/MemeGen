@@ -13,7 +13,7 @@
         <a href="" class="logo" onclick="onGallerySelect()">MemeGen</a>
         <nav class="nav-bar">
             <a href="" onclick="onGallerySelect()">Gallery</a>
-            <a href="#about">About</a>
+            <a href="" onclick="openAbout()">About</a>
         </nav>
     </header>
 
@@ -41,6 +41,14 @@
             <a href="#" class="btn" onclick="downloadImg(this)" download="my-meme.jpg">Download meme</a>
         </section>
     </section>
+
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="close">x</span>
+            <h2>about MemeGen</h2>
+            <p>Made by Yehonatan Menashe for Coding Academy fullstack course on June 2024</p>
+        </div>
+    </div>
 
     <script src="js/services/utils.services.js"></script>
     <script src="js/services/meme.service.js"></script>
